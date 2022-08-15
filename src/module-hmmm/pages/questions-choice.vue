@@ -2,45 +2,72 @@
   <div>
     <div class="question-container">
       <el-card class="box-card">
-        <QuestionsSelect :options="options"></QuestionsSelect>
+        <QuestionsSelect
+          :options="options"
+          :tableData="tableData"
+        ></QuestionsSelect>
+        <QuestionsTable
+          :total="total"
+          :tableData="tableData"
+          :tableInfo="tableInfo"
+          @pageSizeChange="pageSizeChange"
+          @pageChange="pageChange"
+          :paginationPagesize="tableInfo.pagesize"
+          :paginationPage="tableInfo.page"
+        ></QuestionsTable>
       </el-card>
     </div>
   </div>
 </template>
 <script>
+import { list } from "@/api/hmmm/questions";
+import { simple } from "@/api/hmmm/subjects";
 import QuestionsSelect from "../components/questions-select.vue";
+import QuestionsTable from "../components/questions-table.vue";
 export default {
   props: {},
-  components: { QuestionsSelect },
+  components: { QuestionsSelect, QuestionsTable },
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
-      value: "",
+      // 学科
+      options: [],
+
+      tableInfo: {
+        page: 1,
+        pagesize: 10,
+      },
+      total: 0,
+      tableData: [],
     };
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    async getList() {
+      const { data } = await list(this.tableInfo, this.tableData);
+      this.total = data.counts;
+      this.tableData = data.items;
+      console.log(this.tableData, "tableData");
+    },
+
+    // 目录简单列表
+    async getSubject() {
+      const { data } = await simple();
+      this.options = data;
+    },
+    // 每页显示信息条数
+    pageSizeChange(val) {
+      this.tableInfo.pagesize = val;
+      this.getList();
+    },
+    // 进入某一页
+    pageChange(val) {
+      this.tableInfo.page = val;
+      this.getList();
+    },
+  },
+  mounted() {
+    this.getList();
+    this.getSubject();
+  },
   computed: {},
   watch: {},
   updated() {},

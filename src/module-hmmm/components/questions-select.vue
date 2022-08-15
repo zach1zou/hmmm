@@ -3,7 +3,11 @@
     <!-- 题头 -->
     <div class="container-title">
       <span style="font-size: 20px; color: pink">作者：邹宗霖</span>
-      <el-button type="success" icon="el-icon-edit" size="small"
+      <el-button
+        type="success"
+        icon="el-icon-edit"
+        size="small"
+        @click="addSubject"
         >新增试题</el-button
       >
     </div>
@@ -14,7 +18,7 @@
           ><div class="grid-content">
             <span>学科</span
             ><el-select
-              v-model="Subjectvalue"
+              v-model="question.subjectID"
               placeholder="请选择"
               style="width: 100%"
               @change="changeSubjectValue"
@@ -32,7 +36,7 @@
           ><div class="grid-content">
             <span>二级目录</span
             ><el-select
-              v-model="SecondSubjectValue"
+              v-model="question.catalogID"
               placeholder="请选择"
               style="width: 100%"
             >
@@ -49,7 +53,7 @@
           ><div class="grid-content">
             <span>标签</span
             ><el-select
-              v-model="tagsValue"
+              v-model="question.tags"
               placeholder="请选择"
               style="width: 100%"
             >
@@ -66,7 +70,7 @@
           ><div class="grid-content">
             <span>关键字</span
             ><el-input
-              v-model="keywordsinput"
+              v-model="question.keyword"
               placeholder="请输入内容"
             ></el-input></div
         ></el-col>
@@ -76,7 +80,7 @@
           ><div class="grid-content">
             <span>试题类型</span
             ><el-select
-              v-model="questionTypeValue"
+              v-model="question.questionType"
               placeholder="请选择"
               style="width: 100%"
             >
@@ -93,7 +97,7 @@
           ><div class="grid-content">
             <span>难度</span
             ><el-select
-              v-model="difficultyValue"
+              v-model="question.difficulty"
               placeholder="请选择"
               style="width: 100%"
             >
@@ -110,7 +114,7 @@
           ><div class="grid-content">
             <span>方向</span
             ><el-select
-              v-model="directionValue"
+              v-model="question.direction"
               placeholder="请选择"
               style="width: 100%"
             >
@@ -127,7 +131,7 @@
           ><div class="grid-content">
             <span>录入人</span
             ><el-select
-              v-model="userValue"
+              v-model="question.creatorID"
               placeholder="请选择"
               style="width: 100%"
             >
@@ -146,7 +150,7 @@
           ><div class="grid-content">
             <span>题目备注</span
             ><el-input
-              v-model="subjectinput"
+              v-model="question.remarks"
               placeholder="请输入内容"
             ></el-input></div
         ></el-col>
@@ -154,7 +158,7 @@
           ><div class="grid-content">
             <span>企业简称</span
             ><el-input
-              v-model="companyinput"
+              v-model="question.shortName"
               placeholder="请输入内容"
             ></el-input></div
         ></el-col>
@@ -162,28 +166,29 @@
           ><div class="grid-content">
             <span>城市</span
             ><el-select
-              v-model="Cityvalue"
+              @change="changeProvince(question.province)"
+              v-model="question.province"
               placeholder="请选择"
               style="width: 48%; margin-right: 2%"
             >
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in provincesData"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
             <el-select
-              v-model="Cityvalue"
+              v-model="question.city"
               placeholder="请选择"
               style="width: 50%"
             >
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in citysData"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select></div
@@ -191,8 +196,10 @@
         <el-col :span="6"
           ><div class="grid-content">
             <div style="width: 80%"></div>
-            <el-button size="small">清除</el-button>
-            <el-button type="primary" size="small">搜索</el-button>
+            <el-button size="small" @click="clearData">清除</el-button>
+            <el-button type="primary" size="small" @click="search"
+              >搜索</el-button
+            >
           </div></el-col
         >
       </el-row>
@@ -201,10 +208,11 @@
 </template>
 
 <script>
+import { provinces, citys, datas } from "@/api/hmmm/citys.js";
 import { difficulty, direction, questionType } from "@/api/hmmm/constants";
 import { directoryssimple } from "@/api/hmmm/directorys";
 import { tagssimple } from "@/api/hmmm/tags";
-import { list } from "@/api/hmmm/questions";
+import { list, add } from "@/api/hmmm/questions";
 
 export default {
   name: "QuestionsSelect",
@@ -216,31 +224,38 @@ export default {
   },
   data() {
     return {
-      // 学科
-      Subjectvalue: "",
-      // 二级目录
-      SecondSubjectValue: "",
-      // 标签
-      tagsValue: "",
-      //难度
-      difficultyValue: "",
-      //方向
-      directionValue: "",
-      //试题类型
-      questionTypeValue: "",
-      //录入人
-      userValue: "",
-      // 城市
-      Cityvalue: "",
+      question: {
+        // 学科
+        subjectID: "",
+        // 二级目录
+        catalogID: "",
+        // 标签
+        tags: "",
+        //难度
+        difficulty: "",
+        //方向
+        direction: "",
+        //试题类型
+        questionType: "",
+        //录入人
+        creatorID: "",
+        // 城市
+        province: "",
+        city: "",
+        //关键字
+        keyword: "",
+        //题目备注
+        remarks: "",
+        //企业简称
+        shortName: "",
+      },
+      // 市
+      provincesData: provinces(datas),
+      // 区
+      citysData: [],
       directorysList: [],
       tagsList: [],
       userList: [],
-      //关键字
-      keywordsinput: "",
-      //题目备注
-      subjectinput: "",
-      //企业简称
-      companyinput: "",
 
       difficultyList: difficulty,
       directionList: direction,
@@ -263,7 +278,24 @@ export default {
     // 获取录入人列表
     async getUserList() {
       const { data } = await list();
+      console.log(data);
       this.userList = [...new Set(data.items.map((val) => val.creator))];
+    },
+    // 改变城市的时候
+    changeProvince(val) {
+      this.citysData = citys(val);
+    },
+    // 清除
+    clearData() {
+      this.question = {};
+    },
+    // 搜索
+    search() {
+      this.$emit("search", this.question);
+    },
+    // 增加试题
+    async addSubject() {
+      this.$emit("addSubject");
     },
   },
   mounted() {

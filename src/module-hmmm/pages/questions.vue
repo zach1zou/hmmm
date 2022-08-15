@@ -5,6 +5,7 @@
         <QuestionsSelect
           :options="options"
           :tableData="tableData"
+          @search="search"
         ></QuestionsSelect>
         <QuestionsTable
           :total="total"
@@ -42,7 +43,7 @@ export default {
   },
   methods: {
     async getList() {
-      const { data } = await list(this.tableInfo, this.tableData);
+      const { data } = await list(this.tableInfo);
       this.total = data.counts;
       this.tableData = data.items;
       console.log(this.tableData, "tableData");
@@ -62,6 +63,10 @@ export default {
     pageChange(val) {
       this.tableInfo.page = val;
       this.getList();
+    },
+    //搜索
+    async search(val) {
+      await list(this.tableInfo, { val });
     },
   },
   mounted() {
