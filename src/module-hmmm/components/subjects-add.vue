@@ -6,19 +6,22 @@
       @click.native="$emit('newClass')"
       @close="closeFn"
     >
-      <el-form :form='sizeForm'>
-        <el-form-item label="活动名称" label-width="120px" style="width: 300px">
+      <el-form :form="sizeForm" :rules="sizeFormRuler">
+        <el-form-item
+          label="活动名称"
+          label-width="120px"
+          style="width: 300px"
+          prop="names"
+        >
           <el-input autocomplete="off" v-model="sizeForm.name"></el-input>
         </el-form-item>
         <el-form-item label-width="120px" label="是否显示">
-          <el-switch v-model="sizeForm.desc"></el-switch>
+          <el-switch></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button @click="showDialog = false">取 消</el-button>
+        <el-button type="primary" @click="showDialog = false">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -30,13 +33,12 @@ export default {
     return {
       sizeForm: {
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+      },
+      sizeFormRuler: {
+        names: [
+          { required: true, message: "请输入学科名称", trigger: "blur" },
+          { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" },
+        ],
       },
     };
   },

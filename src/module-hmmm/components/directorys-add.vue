@@ -6,7 +6,7 @@
       @click.native="$emit('newClass')"
       @close="closeFn"
     >
-      <el-form :form='sizeForm'>
+      <el-form :form="sizeForm">
         <el-form-item label="活动名称" label-width="120px" style="width: 300px">
           <el-input autocomplete="off" v-model="sizeForm.name"></el-input>
         </el-form-item>
@@ -15,10 +15,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button @click="showDialog = false">取 消</el-button>
+        <el-button type="primary" @click="showDialog = false">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -30,12 +28,6 @@ export default {
     return {
       sizeForm: {
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
         desc: "",
       },
     };

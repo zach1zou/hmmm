@@ -2,15 +2,21 @@
   <div class="container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-form :inline="true" class="demo-form-inline">
+        <el-form :inline="true" class="demo-form-inline" :model="value">
           <el-form-item label="学科名称">
-            <el-input placeholder=""></el-input>
+            <el-input
+              v-model="value.name"
+              placeholder="请输入学科"
+              @clear="list"
+            ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button @click="resetForm('ruleForm')">清除</el-button>
+            <el-button @click="clearFn">清除</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">查询</el-button>
+            <el-button type="primary" @click="search(value.name)"
+              >查询</el-button
+            >
           </el-form-item>
           <el-button style="float: right" type="success" @click="newClasses">
             <i class="el-icon-edit"> 添加学科 </i>
@@ -76,6 +82,9 @@ export default {
         pageSize: 10,
       },
       showDialog: false,
+      value: {
+        name: "",
+      },
     };
   },
   computed: {
@@ -92,10 +101,26 @@ export default {
   },
   methods: {
     async list() {
-      const { data } = await list(this.pageSizeInfo);
-      console.log(data);
+      const { data } = await list({
+        subjectName: this.value.name, //获取输入框的内容
+        pageSize: this.pageSizeInfo.pageSize,  //获取数据内容页码里面的数量
+        page: this.pageSizeInfo.page,  //获取数据内容的页码数
+      });
+      // console.log(data);
       this.tableData = data.items;
       this.counts = data.counts;
+    },
+    search(val) {
+      // 获取输入框的内容
+      // 然后把输入框的内容传上去
+      this.value.name = val;
+      console.log(val);
+      this.list(this.pageSizeInfo);
+      // console.log('haushdlkjashdas');
+    },
+    clearFn() {
+      this.value.name = "";
+      this.list();
     },
     nextPage(val) {
       this.pageSizeInfo.page = val;

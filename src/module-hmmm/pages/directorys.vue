@@ -2,21 +2,26 @@
   <div class="container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-form :inline="true" class="demo-form-inline">
+        <el-form :inline="true" class="demo-form-inline" :model="value">
           <el-form-item label="目录名称">
-            <el-input placeholder=""></el-input>
+            <el-input
+              placeholder="请输入目录名称"
+              v-model="value.name"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="活动区域">
-            <el-select placeholder="活动区域" v-model="value">
+          <el-form-item label="状态">
+            <el-select placeholder="活动区域" v-model="value.region">
               <el-option label="启用" value="1"></el-option>
               <el-option label="禁用" value="0"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button @click="clearFn">清除</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">查询</el-button>
+            <el-button type="primary" @click="search(value.name, value.region)"
+              >查询</el-button
+            >
           </el-form-item>
           <el-button style="float: right" type="success" @click="newClasses">
             <i class="el-icon-edit"> 添加目录 </i>
@@ -72,8 +77,11 @@ export default {
         page: 1,
         pageSize: 10,
       },
-      value: "",
-      showDialog: false
+      value: {
+        name: "",
+        region: "",
+      },
+      showDialog: false,
     };
   },
   components: {
@@ -90,10 +98,25 @@ export default {
   },
   methods: {
     async list() {
-      const { data } = await list(this.pageSizeInfo);
+      const { data } = await list({
+        directoryName: this.value.name,
+        state: this.value.region,
+        pageSize: this.pageSizeInfo.pageSize,
+        page: this.pageSizeInfo.page,
+      });
       console.log(data);
       this.tableData = data.items;
       this.counts = data.counts;
+    },
+    search(val, region) {
+      this.value.name = val;
+      this.value.state = region;
+      this.list();
+    },
+    clearFn() {
+      this.value.name = "";
+      this.value.region = "";
+      this.list();
     },
     nextPage(val) {
       this.pageSizeInfo.page = val;
