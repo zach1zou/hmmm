@@ -67,6 +67,7 @@
               :paginationPage="tableInfo.page"
               :showQuestion="showQuestion"
               @submitSuccess="submitSuccess"
+              @PublishSuccess="PublishSuccess"
             >
             </QuestionsTable
           ></el-tab-pane>
@@ -89,7 +90,7 @@ export default {
       // 学科
       options: [],
       // 标签页
-      activeName: "first",
+      activeName: localStorage.getItem("TabActiveName") || "first",
       tableInfo: {
         page: 1,
         pagesize: 5,
@@ -116,7 +117,7 @@ export default {
       } else {
         this.tableInfo.chkState = index - 1;
       }
-
+      localStorage.setItem("TabActiveName", this.activeName);
       this.getList();
     },
 
@@ -142,6 +143,10 @@ export default {
     },
     // 审核成功
     submitSuccess() {
+      this.getList();
+    },
+    // 上架成功
+    PublishSuccess() {
       this.getList();
     },
   },

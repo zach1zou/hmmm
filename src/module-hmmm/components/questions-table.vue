@@ -140,7 +140,7 @@
             <el-button
               type="text"
               size="small"
-              :disabled="scope.row.chkState == 2 ? false : true"
+              :disabled="scope.row.chkState == 0 ? false : true"
               @click="handleCheck(scope.row)"
               >审核</el-button
             >
@@ -158,14 +158,14 @@
               "
               >修改</el-button
             >
-            <el-button type="text" size="small">{{
+            <el-button type="text" size="small" @click="PublishFn(scope.row)">{{
               scope.row.publishState == 2 ? "下架" : "上架"
             }}</el-button>
             <el-button
               disabled
               type="text"
               size="small"
-              :disabled="scope.row.publishState == 2 ? true : false"
+              :disabled="scope.row.publishState == 1 ? true : false"
               @click="handleDelete(scope.row)"
               >删除</el-button
             >
@@ -303,7 +303,13 @@ import {
   publishType,
 } from "@/api/hmmm/constants";
 import PageTool from "../../module-manage/components/page-tool.vue";
-import { remove, choiceAdd, detail, choiceCheck } from "@/api/hmmm/questions";
+import {
+  remove,
+  choiceAdd,
+  detail,
+  choiceCheck,
+  choicePublish,
+} from "@/api/hmmm/questions";
 
 export default {
   name: "questions-table",
@@ -422,6 +428,27 @@ export default {
       this.$message.success("审核成功");
       this.checkInfoDialog = false;
       this.$emit("submitSuccess");
+    },
+    // 上下架
+    async PublishFn(row) {
+      console.log(row, "上下架");
+      if (row.publishState == 1) {
+        await this.$confirm("您确认下架这道题目吗?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        });
+        this.$message.success("下架成功");
+      } else {
+        await this.$confirm("您确认上架这道题目吗?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        });
+        this.$message.success("上架成功");
+      }
+      this.$emit("PublishSuccess");
+      await choicePublish(row);
     },
   },
   mounted() {},
