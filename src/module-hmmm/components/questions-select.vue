@@ -7,7 +7,7 @@
         type="success"
         icon="el-icon-edit"
         size="small"
-        @click="addSubject"
+        @click="$router.push('/questions/new')"
         >新增试题</el-button
       >
     </div>
@@ -212,7 +212,7 @@ import { provinces, citys, datas } from "@/api/hmmm/citys.js";
 import { difficulty, direction, questionType } from "@/api/hmmm/constants";
 import { directoryssimple } from "@/api/hmmm/directorys";
 import { tagssimple } from "@/api/hmmm/tags";
-import { list, add } from "@/api/hmmm/questions";
+import { list } from "@/api/hmmm/questions";
 
 export default {
   name: "QuestionsSelect",
@@ -292,10 +292,6 @@ export default {
     // 搜索
     search() {
       this.$emit("search", this.question);
-    },
-    // 增加试题
-    async addSubject() {
-      this.$emit("addSubject");
     },
   },
   mounted() {

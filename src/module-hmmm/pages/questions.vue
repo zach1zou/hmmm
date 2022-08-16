@@ -13,6 +13,8 @@
           :tableInfo="tableInfo"
           @pageSizeChange="pageSizeChange"
           @pageChange="pageChange"
+          @delete="deleteFn"
+          @choiceAdd="choiceAddFn"
           :paginationPagesize="tableInfo.pagesize"
           :paginationPage="tableInfo.page"
         ></QuestionsTable>
@@ -35,10 +37,11 @@ export default {
 
       tableInfo: {
         page: 1,
-        pagesize: 10,
+        pagesize: 5,
       },
       total: 0,
       tableData: [],
+      ishow: false,
     };
   },
   methods: {
@@ -67,6 +70,14 @@ export default {
     //搜索
     async search(val) {
       await list(this.tableInfo, { val });
+    },
+    // delete
+    deleteFn() {
+      this.getList();
+    },
+    //加入精选题库
+    choiceAddFn() {
+      this.getList();
     },
   },
   mounted() {
