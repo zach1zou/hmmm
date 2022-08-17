@@ -246,10 +246,18 @@
         <!-- 参考答案 -->
         <div>
           <span>【参考答案】：</span>
-          <el-button type="danger" size="small" @click="showVideo = true"
+          <el-button
+            type="danger"
+            size="small"
+            @click="showVideo = true"
+            style="display: block"
             >视频答案预览</el-button
           >
-          <video :src="dialogInfo.videoURL" v-show="showVideo"></video>
+          <video v-show="showVideo" width="320" height="240" controls autoplay>
+            <source :src="dialogInfo.videoURL" type="video/ogg" />
+            <source :src="dialogInfo.videoURL" type="video/mp4" />
+            <source :src="dialogInfo.videoURL" type="video/webm" />
+          </video>
         </div>
         <hr />
         <!-- 答案解析 -->
