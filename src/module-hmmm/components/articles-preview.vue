@@ -12,9 +12,9 @@
         <div class="preview-title">{{ articlesInfo.title }}</div>
         <div class="preview-nav">
           <span>{{ articlesInfo.createTime }}</span>
-          <span>{{ articlesInfo.username }}</span>
+          <span>{{ articlesInfo.creator }}</span>
           <span class="el-icon-view"></span>
-          <span>{{ articlesInfo.visits }}</span>
+          <span>{{ articlesInfo.reads }}</span>
         </div>
         <div class="preview-content" v-html="articlesInfo.articleBody"></div>
       </div>

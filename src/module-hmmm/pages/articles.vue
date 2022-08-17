@@ -2,7 +2,8 @@
   <div class="container">
     <articlesAdd
       :visible.sync="addDialogVisible"
-      @addArticlesFrom="addArticlesFrom"
+      :articlesForm="articlesForm"
+      @resetArt="resetArt"
     />
     <articlesPreview
       :visible.sync="previewDialogVisible"
@@ -78,13 +79,13 @@
 
         <el-table-column label="阅读数">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.visits }}</span>
+            <span style="margin-left: 10px">{{ scope.row.reads }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="录入人">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.username }}</span>
+            <span style="margin-left: 10px">{{ scope.row.creator }}</span>
           </template>
         </el-table-column>
         <el-table-column label="录入时间">
@@ -106,7 +107,10 @@
           <!-- question-choice -->
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="handleEdit(scope.row)"
+              <el-button
+                type="text"
+                size="small"
+                @click="updateArticles(scope.row)"
                 >预览</el-button
               >
               <el-button
@@ -116,7 +120,7 @@
                 @click="handleCheck(scope.row)"
                 >启用</el-button
               >
-              <el-button type="text" size="small" @click="updateArticles"
+              <el-button type="text" size="small" @click="handleEdit(scope.row)"
                 >修改</el-button
               >
               <el-button
@@ -149,7 +153,15 @@
 
 <script>
 import PageTool from "../../module-manage/components/page-tool.vue";
-import { list } from "@/api/hmmm/articles";
+import {
+  list,
+  simple,
+  detail,
+  add,
+  update,
+  remove,
+  changeState,
+} from "@/api/hmmm/articles";
 import { status } from "@/api/hmmm/constants";
 import articlesAdd from "../components/articles-add.vue";
 import articlesPreview from "../components/articles-preview.vue";
@@ -170,8 +182,8 @@ export default {
       articlesInfo: {
         title: "",
         createTime: "",
-        username: "",
-        visits: "",
+        creator: "",
+        reads: "",
         articleBody: "",
       },
 
