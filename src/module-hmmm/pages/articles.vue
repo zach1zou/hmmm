@@ -1,11 +1,25 @@
 <template>
-  <div class='container'>面试技巧</div>
+  <div class="container">
+    <articlesAdd
+      :addDialogVisible="addDialogVisible"
+      @addArticlesFrom="addArticlesFrom"
+    />
+    <articlesPreview :previewDialogVisible="previewDialogVisible" />
+  </div>
 </template>
 
 <script>
-export default {}
+import articlesAdd from "../components/articles-add.vue";
+import articlesPreview from "../components/articles-preview.vue";
+export default {
+  components: {
+    articlesAdd,
+    articlesPreview,
+  },
+  methods: {
+    addArticlesFrom() {},
+  },
+};
 </script>
 
-<style scoped lang='less'>
-
-</style>
+<style scoped lang="less"></style>
