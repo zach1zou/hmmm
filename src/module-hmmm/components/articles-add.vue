@@ -37,7 +37,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button @click="visible = false">取 消</el-button>
         <el-button type="primary" @click="addArticlesFrom">确 定</el-button>
       </span>
     </el-dialog>
@@ -100,9 +100,11 @@ export default {
   },
   methods: {
     addArticlesFrom() {
+      this.visible = false;
       this.$emit("addArticlesFrom");
     },
     resetArt() {
+      this.visible = false;
       this.$emit("resetArt");
     },
   },
@@ -136,5 +138,8 @@ export default {
 
 .el-form-item__content {
   margin-left: 10px;
+}
+/deep/.ql-container {
+  height: 200px;
 }
 </style>
