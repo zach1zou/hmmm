@@ -7,10 +7,10 @@
       :current-page="Number(paginationPage)"
       :total="Number(total)"
       :page-size="Number(paginationPagesize)"
-      :page-sizes="[10,20,30, 50]"
+      :page-sizes="[10, 20, 30, 50]"
       layout="sizes, prev, pager, next, jumper"
-      >
-      </el-pagination>
+    >
+    </el-pagination>
   </div>
 </template>
 <script>
@@ -27,11 +27,18 @@ export default {
     },
     // 每页显示信息条数
     onPageSizeChange: function (pageSize) {
-      this.$emit('pageSizeChange', pageSize)
-    }
-  }
-}
+      this.$emit("pageSizeChange", pageSize);
+    },
+  },
+};
 </script>
 <style>
-.blue{color: #409EFF;}
+.blue {
+  color: #409eff;
+}
+.pages {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
 </style>
