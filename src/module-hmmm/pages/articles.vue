@@ -11,6 +11,9 @@
     />
     <!-- 页面 -->
     <el-card class="box-card">
+      <div style="font-size: 20px; color: pink; margin-bottom: 20px">
+        作者：邹宗霖
+      </div>
       <el-row>
         <el-col :span="22"
           ><div class="box-header">
