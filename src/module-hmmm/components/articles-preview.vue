@@ -3,8 +3,9 @@
     <!-- 预览框 -->
     <el-dialog
       title="预览文章"
-      :visible.sync="previewDialogVisible"
+      :visible="visible"
       width="50%"
+      @close="resetPreview"
     >
       <!-- 主体区域 -->
       <div class="preview-box">
@@ -25,14 +26,21 @@
 export default {
   name: "articlePreview",
   data() {
-    return {
-      previewDialogVisible: false,
-    };
+    return {};
   },
   props: {
     articlesInfo: {
-      type: Array,
+      type: Object,
       required: true,
+    },
+    visible: {
+      type: Boolean,
+      default: () => false,
+    },
+  },
+  methods: {
+    resetPreview() {
+      this.$emit("resetPreview");
     },
   },
 };

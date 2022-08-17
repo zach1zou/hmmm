@@ -2,7 +2,7 @@
   <div class="container">
     <el-dialog
       title="添加文章"
-      :visible.sync="addDialogVisible"
+      :visible="visible"
       width="50%"
       @close="resetArt"
     >
@@ -50,9 +50,9 @@ import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 export default {
+  name: "articles-add",
   data() {
     return {
-      addDialogVisible: false,
       // 富文本选项
       editorOption: {
         placeholder: "请输入文章内容",
@@ -89,7 +89,10 @@ export default {
     // 添加框数据
     articlesForm: {
       type: Object,
-      required: true,
+    },
+    visible: {
+      type: Boolean,
+      default: () => false,
     },
   },
   components: {
@@ -99,7 +102,11 @@ export default {
     addArticlesFrom() {
       this.$emit("addArticlesFrom");
     },
+    resetArt() {
+      this.$emit("resetArt");
+    },
   },
+  mounted() {},
 };
 </script>
 
