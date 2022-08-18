@@ -21,6 +21,7 @@
               :paginationPagesize="tableInfo.pagesize"
               :paginationPage="tableInfo.page"
               :showQuestion="showQuestion"
+              @submitSuccess="submitSuccess"
             >
             </QuestionsTable>
           </el-tab-pane>
@@ -36,6 +37,7 @@
               :paginationPagesize="tableInfo.pagesize"
               :paginationPage="tableInfo.page"
               :showQuestion="showQuestion"
+              @submitSuccess="submitSuccess"
             >
             </QuestionsTable
           ></el-tab-pane>
@@ -51,6 +53,7 @@
               :paginationPagesize="tableInfo.pagesize"
               :paginationPage="tableInfo.page"
               :showQuestion="showQuestion"
+              @submitSuccess="submitSuccess"
             >
             </QuestionsTable
           ></el-tab-pane>
