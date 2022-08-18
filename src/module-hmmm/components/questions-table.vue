@@ -107,7 +107,7 @@
               @click="
                 $router.push({
                   name: 'questions-new',
-                  params: {
+                  query: {
                     id: scope.row.id,
                   },
                 })
@@ -151,7 +151,7 @@
               @click="
                 $router.push({
                   name: 'questions-new',
-                  params: {
+                  query: {
                     id: scope.row.id,
                   },
                 })
