@@ -16,7 +16,7 @@
     <!-- 页面 -->
     <el-card class="box-card">
       <div style="font-size: 20px; color: pink; margin-bottom: 20px">
-        作者：邹宗霖
+        作者：邹宗霖/钟妍榕
       </div>
       <el-row>
         <el-col :span="22"
@@ -77,6 +77,18 @@
         <el-table-column label="文章标题">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.title }}</span>
+            <i
+              class="el-icon-film"
+              style="margin-left: 10px; color: blue"
+              @click="dialogVideoVisible = true"
+            ></i>
+            <el-dialog :visible.sync="dialogVideoVisible" title="视频">
+              <video width="320" height="240" controls autoplay>
+                <source :src="scope.row.videoURL" type="video/ogg" />
+                <source :src="scope.row.videoURL" type="video/mp4" />
+                <source :src="scope.row.videoURL" type="video/webm" />
+              </video>
+            </el-dialog>
           </template>
         </el-table-column>
 
@@ -201,6 +213,7 @@ export default {
       addDialogVisible: false,
       previewDialogVisible: false,
       tableData: [],
+      dialogVideoVisible: false,
     };
   },
   methods: {
