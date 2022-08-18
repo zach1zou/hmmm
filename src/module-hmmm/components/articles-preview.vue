@@ -11,10 +11,10 @@
       <div class="preview-box">
         <div class="preview-title">{{ articlesInfo.title }}</div>
         <div class="preview-nav">
-          <span>{{ articlesInfo.createTime }}</span>
-          <span>{{ articlesInfo.creator }}</span>
+          <span>{{ articlesInfo.createTime | delTime }}</span>
+          <span>{{ articlesInfo.username }}</span>
           <span class="el-icon-view"></span>
-          <span>{{ articlesInfo.reads }}</span>
+          <span>{{ articlesInfo.visits }}</span>
         </div>
         <div class="preview-content" v-html="articlesInfo.articleBody"></div>
       </div>
@@ -41,6 +41,11 @@ export default {
   methods: {
     resetPreview() {
       this.$emit("resetPreview");
+    },
+  },
+  filters: {
+    delTime(val) {
+      return val.replace("T", " ").replace(".000Z", "");
     },
   },
 };

@@ -93,7 +93,7 @@ export default {
       activeName: localStorage.getItem("TabActiveName") || "first",
       tableInfo: {
         page: 1,
-        pagesize: 5,
+        pagesize: 10,
         chkState: null,
       },
       total: 0,

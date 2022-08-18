@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-dialog
-      title="添加文章"
+      :title="articlesForm.id ? '修改文章' : '新增文章'"
       :visible="visible"
       width="50%"
       @close="resetArt"
@@ -37,8 +37,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取 消</el-button>
-        <el-button type="primary" @click="addArticlesFrom">确 定</el-button>
+        <el-button @click="$emit('onClose')">取 消</el-button>
+        <el-button type="primary" @click="onTrue">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -89,6 +89,7 @@ export default {
     // 添加框数据
     articlesForm: {
       type: Object,
+      default: () => {},
     },
     visible: {
       type: Boolean,
@@ -99,13 +100,13 @@ export default {
     quillEditor,
   },
   methods: {
-    addArticlesFrom() {
-      this.visible = false;
-      this.$emit("addArticlesFrom");
-    },
     resetArt() {
-      this.visible = false;
       this.$emit("resetArt");
+    },
+    async onTrue() {
+      await this.$refs.articlesFormRef.validate();
+
+      this.$emit("addUpdateArticlesFrom");
     },
   },
   mounted() {},
