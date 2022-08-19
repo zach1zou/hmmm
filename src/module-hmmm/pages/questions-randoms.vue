@@ -164,28 +164,32 @@ export default {
     },
     // 点击显示
     async showPreview(num) {
-      console.log(num);
-      const { data } = await choice();
-      // const rows = data.items.filter((item) => {
-      //   return item.questionType === row.questionType;
-      // });
-      // console.log(data);
+      try {
+        console.log(num);
+        const { data } = await choice();
+        // const rows = data.items.filter((item) => {
+        //   return item.questionType === row.questionType;
+        // });
+        // console.log(data);
 
-      this.arr.push({
-        id: data.items[Math.floor(Math.random() * data.items.length)].id,
-        num: num.num,
-      });
-      const a = this.arr.filter((item) => {
-        return item.num === num.num;
-      });
-      console.log(a);
-      const res = await detail({
-        id: a[0].id,
-      });
-      // console.log(res);
+        this.arr.push({
+          id: data.items[Math.floor(Math.random() * data.items.length)].id,
+          num: num.num,
+        });
+        const a = this.arr.filter((item) => {
+          return item.num === num.num;
+        });
+        console.log(a);
+        const res = await detail({
+          id: a[0].id,
+        });
+        // console.log(res);
 
-      this.$refs.preview.DetailList = res.data;
-      this.showQuestionsPreview = true;
+        this.$refs.preview.DetailList = res.data;
+        this.showQuestionsPreview = true;
+      } catch (error) {
+        this.$message.error('请刷新重试')
+      }
     },
   },
 };

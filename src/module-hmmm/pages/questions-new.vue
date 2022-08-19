@@ -247,10 +247,10 @@ import { simple } from "@/api/hmmm/subjects";
 import { list as getDirectorysApi } from "@/api/hmmm/directorys";
 import { list as getCompanyListApi } from "@/api/hmmm/companys";
 import { provinces, citys } from "@/api/hmmm/citys";
-import { simple as getTagListApi } from "@/api/hmmm/tags";
+import { tagssimple as getTagListApi } from "@/api/hmmm/tags";
 import hljs from "highlight.js";
 import "highlight.js/styles/xcode.css";
-import { add as addQuestionApi } from "@/api/hmmm/questions";
+import { add as addQuestionApi, detail, update } from "@/api/hmmm/questions";
 export default {
   name: "question",
   components: {
@@ -364,12 +364,63 @@ export default {
       },
     };
   },
-  created() {
-    // this.defaultSelect();
+  mounted() {
+
+    this.cancelQuestion();
   },
   methods: {
-    // 试题录入
+    // 基础题库编辑
+    async cancelQuestion() {
+      if (!this.$route.query.id) return;
 
+      const res = await getCompanyListApi();
+      console.log(res);
+      const { data } = await detail({
+        id: this.$route.query.id,
+      });
+      this.getsimpleList();
+      this.getCompanyList();
+      
+  
+      this.form.answercontent = data.answer;
+
+
+      this.form.city2 = data.city;
+
+      this.form.difficulty = parseInt(data.difficulty);
+
+      this.form.direction = data.direction;
+   
+      this.form.enterprise = data.enterpriseID;
+      //   options: this.form.radio1,
+      const option = [];
+      data.options.forEach((item) => {
+        console.log(item.isRight);
+        item.isRight = item.isRight ? true : false;
+
+        option.push(item);
+      });
+      this.form.radio1 = option;
+
+      this.form.city1 = data.province;
+  
+      this.form.content = data.question;
+      
+      this.form.typeRadio = parseInt(data.questionType);
+      
+      this.form.remark = data.remarks;
+      
+
+      this.form.subject = data.subjectName;
+      
+      this.form.directory = data.directoryName;
+
+      //   tags: this.form.tag.join(),
+      this.form.tag = data.tags.split();
+      //   videoURL: this.form.parseVideo,
+      this.form.parseVideo = data.videoURL;
+     
+    },
     onChange(index) {
       this.form.radio1.forEach((item) => {
         item.isRight = false;
@@ -377,11 +428,7 @@ export default {
       this.form.radio1[index].isRight = true;
     },
     // 标签列表
-    async onTag() {
-      const { data } = await getTagListApi();
-      this.tagsList = data;
-      console.log(data);
-    },
+    async onTag() {},
     // 城市列表
     oneCitys() {
       this.form.city2 = "";
@@ -392,23 +439,30 @@ export default {
     },
     // 企业列表
     async getCompanyList() {
-      const { data } = await getCompanyListApi();
+      const { data } = await getCompanyListApi({
+        pagesize: 999999,
+      });
       this.companyList = data.items;
     },
     // 目录列表
     async subjectDirectory() {
       this.form.directory = "";
-      console.log(this.form.subject);
       const { data } = await getDirectorysApi({
         subjectID: this.form.subject,
       });
       this.directoryList = data.items;
+      console.log(this.form.subject);
+      const res = await getTagListApi({
+        subjectID: this.form.subject,
+      });
+      this.tagsList = res.data;
+ 
     },
     // 学科简单列表
     async getsimpleList() {
       const { data } = await simple();
       this.simpleList = data;
-      console.log(data);
+    
     },
     // 添加选项
     addSelect() {
@@ -423,32 +477,102 @@ export default {
         img: "", //图片
         code: addAscillSelect,
       });
-      // this.form.radio1[this.form.radio1.length - 1].letter = addAscillSelect;
+      
       console.log(this.form.radio1);
     },
 
     async onSubmit() {
-      console.log(this.form.tag.join());
       this.$refs.form.validate();
-      const res = await addQuestionApi({
-        answer: this.form.answercontent,
-        catalogID: this.form.directory,
-        city: this.form.city2,
-        difficulty: this.form.difficulty + "",
-        // difficulty: "1",
-        direction: this.form.direction,
-        enterpriseID: this.form.enterprise,
-        options: this.form.radio1,
-        province: this.form.city1,
-        question: this.form.content,
-        questionType: this.form.typeRadio + "",
-        // questionType: "1",
-        remarks: this.form.remark,
-        subjectID: this.form.subject,
-        tags: this.form.tag.join(),
-        videoURL: this.form.parseVideo,
-      });
-      this.$router.push("list");
+      if (!this.$route.query.id) {
+        await addQuestionApi({
+          answer: this.form.answercontent,
+          catalogID: this.form.directory,
+          city: this.form.city2,
+          difficulty: this.form.difficulty + "",
+          // difficulty: "1",
+          direction: this.form.direction,
+          enterpriseID: this.form.enterprise,
+          options: this.form.radio1,
+          province: this.form.city1,
+          question: this.form.content,
+          questionType: this.form.typeRadio + "",
+          // questionType: "1",
+          remarks: this.form.remark,
+          subjectID: this.form.subject,
+          tags: this.form.tag.join(),
+          videoURL: this.form.parseVideo,
+        });
+        this.$router.push("list");
+      } else {
+        const { data } = await detail({
+          id: this.$route.query.id,
+        });
+        console.log(data);
+        let sub = "";
+        if (typeof this.form.subject == "string") {
+          const subjectID = this.simpleList.filter((item) => {
+            return item.label === this.form.subject;
+          });
+          sub = subjectID[0].value;
+        } else {
+          sub = this.form.subject;
+        }
+
+        const option = [];
+        this.form.radio1.forEach((item) => {
+          console.log(item.isRight);
+          item.isRight = item.isRight ? true : false;
+
+          option.push(item);
+        });
+        let direct = "";
+        if (typeof this.form.directory == "string") {
+          const {
+            data: { items },
+          } = await getDirectorysApi({
+            subjectID: sub,
+          });
+
+          const catalogID = items.filter((item) => {
+            console.log(item);
+            return item.directoryName === this.form.directory;
+          });
+          direct = catalogID[0].id;
+        } else {
+          direct = this.form.directory;
+        }
+
+        const res = await update({
+          addDate: data.addDate,
+          answer: this.form.answercontent,
+          catalogID: direct,
+          // chkDate: null,
+          // chkRemarks: null,
+          // chkState: 0,
+          // chkUserID: null,
+          city: this.form.city2,
+          creatorID: data.creatorID,
+          difficulty: this.form.difficulty + "",
+          direction: this.form.direction,
+          // directoryName: "416546",
+          enterpriseID: this.form.enterprise,
+          id: data.id,
+          isChoice: 0,
+          number: data.number,
+          options: option,
+          province: this.form.city1,
+          // publishDate: "2022-08-19T11:57:23.000Z",
+          // publishState: 0,
+          question: this.form.content,
+          questionType: this.form.typeRadio + "",
+          remarks: this.form.remark,
+          subjectID: sub,
+          // subjectName: sub[0].value,
+          tags: this.form.tag.join(),
+          videoURL: this.form.parseVideo,
+        });
+        this.$router.push("list");
+      }
     },
     questionTypes(val) {
       console.log(val);
