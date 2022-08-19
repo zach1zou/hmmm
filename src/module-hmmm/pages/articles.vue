@@ -1,9 +1,12 @@
 <template>
   <div class="container">
     <articlesAdd
+      ref="articlesAdd"
       :visible.sync="addDialogVisible"
       :articlesForm="articlesForm"
       @resetArt="resetArt"
+      @onClose="onClose"
+      @addUpdateArticlesFrom="addUpdateArticlesFrom"
     />
     <articlesPreview
       :visible.sync="previewDialogVisible"
@@ -12,6 +15,9 @@
     />
     <!-- 页面 -->
     <el-card class="box-card">
+      <div style="font-size: 20px; color: pink; margin-bottom: 20px">
+        作者：邹宗霖/钟妍榕
+      </div>
       <el-row>
         <el-col :span="22"
           ><div class="box-header">
@@ -71,18 +77,30 @@
         <el-table-column label="文章标题">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.title }}</span>
+            <i
+              class="el-icon-film"
+              style="margin-left: 10px; color: blue"
+              @click="dialogVideoVisible = true"
+            ></i>
+            <el-dialog :visible.sync="dialogVideoVisible" title="视频">
+              <video width="320" height="240" controls autoplay>
+                <source :src="scope.row.videoURL" type="video/ogg" />
+                <source :src="scope.row.videoURL" type="video/mp4" />
+                <source :src="scope.row.videoURL" type="video/webm" />
+              </video>
+            </el-dialog>
           </template>
         </el-table-column>
 
         <el-table-column label="阅读数">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.reads }}</span>
+            <span style="margin-left: 10px">{{ scope.row.visits }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="录入人">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.creator }}</span>
+            <span style="margin-left: 10px">{{ scope.row.username }}</span>
           </template>
         </el-table-column>
         <el-table-column label="录入时间">
@@ -113,24 +131,23 @@
               <el-button
                 type="text"
                 size="small"
-                :disabled="scope.row.chkState == 0 ? false : true"
                 @click="handleCheck(scope.row)"
-                >启用</el-button
-              >
-              <el-button type="text" size="small" @click="handleEdit(scope.row)"
-                >修改</el-button
+                >{{ scope.row.state == 0 ? "启用" : "禁用" }}</el-button
               >
               <el-button
                 type="text"
                 size="small"
-                @click="PublishFn(scope.row)"
-                >{{ scope.row.publishState == 2 ? "下架" : "上架" }}</el-button
+                @click="EditArticle(scope.row)"
+                :disabled="scope.row.state == 0 ? false : true"
+                >修改</el-button
               >
+
               <el-button
                 disabled
                 type="text"
                 size="small"
                 @click="handleDelete(scope.row)"
+                :disabled="scope.row.state == 0 ? false : true"
                 >删除</el-button
               >
             </template>
@@ -172,6 +189,7 @@ export default {
   data() {
     return {
       articlesForm: {
+        id: null,
         title: "",
         articleBody: "",
         videoURL: "",
@@ -179,8 +197,8 @@ export default {
       articlesInfo: {
         title: "",
         createTime: "",
-        creator: "",
-        reads: "",
+        username: "",
+        visits: "",
         articleBody: "",
       },
 
@@ -188,13 +206,14 @@ export default {
       total: 0,
       tableInfo: {
         page: 1,
-        pagesize: 5,
+        pagesize: 10,
         keyword: "",
-        state: "",
+        state: null,
       },
       addDialogVisible: false,
       previewDialogVisible: false,
       tableData: [],
+      dialogVideoVisible: false,
     };
   },
   methods: {
@@ -235,10 +254,57 @@ export default {
     // 新增技巧
     addArticles() {
       this.addDialogVisible = true;
+      this.articlesForm = {};
     },
-    // 修改
-    updateArticles() {
+    //修改
+    EditArticle(row) {
+      this.articlesForm = row;
+      this.addDialogVisible = true;
+    },
+    // 确认新增修改
+    async addUpdateArticlesFrom() {
+      if (this.articlesForm.id) {
+        await update(this.articlesForm);
+        this.$message.success("编辑成功");
+      } else {
+        await add(this.articlesForm);
+        this.$message.success("添加成功");
+      }
+
+      this.addDialogVisible = false;
+    },
+    onClose() {
+      this.addDialogVisible = false;
+    },
+    // 删除
+    async handleDelete(row) {
+      await this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+
+      await remove(row);
+      this.$message.success("删除成功!");
+      this.getList();
+    },
+
+    // 预览
+    updateArticles(row) {
       this.previewDialogVisible = true;
+
+      if (row) {
+        this.articlesInfo = row;
+      }
+    },
+    // 启用禁用
+    async handleCheck(row) {
+      if (row.state == 0) {
+        row.state = 1;
+      } else {
+        row.state = 0;
+      }
+      await changeState(row);
     },
   },
   mounted() {

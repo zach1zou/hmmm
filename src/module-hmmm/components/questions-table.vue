@@ -107,7 +107,7 @@
               @click="
                 $router.push({
                   name: 'questions-new',
-                  params: {
+                  query: {
                     id: scope.row.id,
                   },
                 })
@@ -151,7 +151,7 @@
               @click="
                 $router.push({
                   name: 'questions-new',
-                  params: {
+                  query: {
                     id: scope.row.id,
                   },
                 })
@@ -432,10 +432,14 @@ export default {
     },
     // 审核确认
     async onSubmit() {
-      await choiceCheck(this.form);
-      this.$message.success("审核成功");
-      this.checkInfoDialog = false;
-      this.$emit("submitSuccess");
+      try {
+        await choiceCheck(this.form);
+        this.$message.success("审核成功");
+        this.checkInfoDialog = false;
+        this.$emit("submitSuccess");
+      } catch (error) {
+        this.$message.error("审核失败,请把数据填写完整");
+      }
     },
     // 上下架
     async PublishFn(row) {

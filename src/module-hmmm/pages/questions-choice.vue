@@ -21,6 +21,7 @@
               :paginationPagesize="tableInfo.pagesize"
               :paginationPage="tableInfo.page"
               :showQuestion="showQuestion"
+              @submitSuccess="submitSuccess"
             >
             </QuestionsTable>
           </el-tab-pane>
@@ -36,6 +37,7 @@
               :paginationPagesize="tableInfo.pagesize"
               :paginationPage="tableInfo.page"
               :showQuestion="showQuestion"
+              @submitSuccess="submitSuccess"
             >
             </QuestionsTable
           ></el-tab-pane>
@@ -51,6 +53,7 @@
               :paginationPagesize="tableInfo.pagesize"
               :paginationPage="tableInfo.page"
               :showQuestion="showQuestion"
+              @submitSuccess="submitSuccess"
             >
             </QuestionsTable
           ></el-tab-pane>
@@ -93,7 +96,7 @@ export default {
       activeName: localStorage.getItem("TabActiveName") || "first",
       tableInfo: {
         page: 1,
-        pagesize: 5,
+        pagesize: 10,
         chkState: null,
       },
       total: 0,

@@ -37,7 +37,7 @@ export default {
 
       tableInfo: {
         page: 1,
-        pagesize: 5,
+        pagesize: 10,
       },
       total: 0,
       tableData: [],

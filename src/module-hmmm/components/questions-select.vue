@@ -288,6 +288,8 @@ export default {
     // 清除
     clearData() {
       this.question = {};
+      this.directorysList = [];
+      this.tagsList = [];
     },
     // 搜索
     search() {
