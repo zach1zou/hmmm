@@ -70,7 +70,7 @@
 
 <script>
 import { questionType, difficulty } from "@/api/hmmm/constants";
-import { simple as directoryListApi } from "@/api/hmmm/directorys";
+import { directoryssimple as directoryListApi } from "@/api/hmmm/directorys";
 export default {
   props: {
     visible: {
