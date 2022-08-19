@@ -165,7 +165,7 @@ export default {
     // 点击显示
     async showPreview(num) {
       console.log(num);
-      const { data } = await choice();
+      const { data } = await list();
       // const rows = data.items.filter((item) => {
       //   return item.questionType === row.questionType;
       // });
