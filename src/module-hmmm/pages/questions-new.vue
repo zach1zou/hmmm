@@ -1,7 +1,9 @@
 <template>
   <div class="container">
-    <div class="title">试题录入 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;李灿</span></div>
-    
+    <div class="title">
+      试题录入 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;李灿</span>
+    </div>
+
     <!-- 表格 -->
     <div class="table">
       <el-form :rules="rulesForm" ref="form" :model="form" label-width="120px">
@@ -214,6 +216,8 @@
             style="width: 400px"
             v-model="form.tag"
             multiple
+            filterable
+            allow-create
             placeholder="请选择"
             @focus="onTag"
           >
