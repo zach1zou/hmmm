@@ -1,9 +1,48 @@
 <template>
-  <div class='container'>添加标签对话框</div>
+ <div>
+
+ 
+ </div>
 </template>
-
 <script>
-export default {}
+export default {
+data(){
+ 
+},
+ props:{ 
+obj: 
+ {
+ type: Object,
+ default: () => { } 
+} 
+}, 
+ components: {
+ 
+ },
+ methods: {
+ 
+ },
+ created () {
+ 
+ },
+ updated () {
+ 
+ },
+ mounted () {
+  
+ },
+ filters: {
+ 
+ },
+ computed: {
+ 
+ },
+ watch: {
+ 
+ },
+}
 </script>
+<style lang="less" scoped>
 
-<style scoped lang='less'></style>
+ 
+</style>
