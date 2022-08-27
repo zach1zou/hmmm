@@ -1,49 +1,48 @@
 <template>
-  <div class="container">
-    <el-dialog
-      title="添加目录"
-      :visible="showDialog"
-      @click.native="$emit('newClass')"
-      @close="closeFn"
-    >
-      <el-form :form="sizeForm">
-        <el-form-item label="活动名称" label-width="120px" style="width: 300px">
-          <el-input autocomplete="off" v-model="sizeForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label-width="120px" label="是否显示">
-          <el-switch v-model="sizeForm.desc"></el-switch>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="showDialog = false">取 消</el-button>
-        <el-button type="primary" @click="showDialog = false">确 定</el-button>
-      </div>
-    </el-dialog>
-  </div>
-</template>
+ <div>
 
+ 
+ </div>
+</template>
 <script>
 export default {
-  data() {
-    return {
-      sizeForm: {
-        name: "",
-        desc: "",
-      },
-    };
-  },
-  props: {
-    showDialog: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  methods: {
-    closeFn() {
-      this.$emit("closeFn");
-    },
-  },
-};
+data(){
+ 
+},
+ props:{ 
+obj: 
+ {
+ type: Object,
+ default: () => { } 
+} 
+}, 
+ components: {
+ 
+ },
+ methods: {
+ 
+ },
+ created () {
+ 
+ },
+ updated () {
+ 
+ },
+ mounted () {
+  
+ },
+ filters: {
+ 
+ },
+ computed: {
+ 
+ },
+ watch: {
+ 
+ },
+}
 </script>
+<style lang="less" scoped>
 
-<style scoped lang="less"></style>
+ 
+</style>
